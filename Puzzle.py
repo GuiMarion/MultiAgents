@@ -2,29 +2,25 @@ from random import randint
 from math import sqrt
 from Agent import Agent
 from optparse import OptionParser
-
-
+from threading import Lock
 
 class Puzzle:
-
 	def __init__(self, n, nb_agents):
 		self.n = n
 		self.size = n * n
 		self.array = [0] * self.size
+		self.lock_table = [Lock()] * self.size
 
-		if nb_agents > n*n :
+		if(nb_agents > n*n):
 			raise ValueError("The number of agents must be less then n*n")
 
 		for i in range(nb_agents):
 			candidate = randint(0, self.size - 1)
 			goal = randint(0, self.size - 1)
-
-
 			while(self.array[candidate] != 0 or self.array[goal] != 0):
 				candidate = randint(0, self.size - 1)
 				goal = randint(0, self.size - 1)
-
-			self.array[candidate] = Agent(i+1, candidate, goal, self)
+			self.array[candidate] = Agent(i + 1, candidate, goal, self)
 
 	def __repr__(self):
 		toBePrint = ""
@@ -43,26 +39,24 @@ class Puzzle:
 				self.array[i].start()
 				self.array[i].join()
 
-	def move(self, id):
-		print(id,"m'a appelé.")
-
-
-
+	def move(self, agent, new_position):
+		if self.lock_table[new_position].acquire(False) && self.lock_table[id_agent.position].acquire():
+			
+			self.lock_table[new_position].release()
+			return True
+		else:
+			return False
 
 def main(size = 5, nb_agents = 1):
-
 	P = Puzzle(size, nb_agents)
 	print(P)
-
 
 if __name__ == "__main__":
 	parser = OptionParser()
 	parser.add_option("-s", "--size", dest="size", help="n for the array (that is of size n*n)", metavar="SIZE")
 	parser.add_option("-a", "--nb_agents", dest="nb_agents", help="number of agents", metavar="AGENTS")
 
-	#parser.add_option("-p", "--pickle", action="store_true", dest="pickle", help="create pickles", metavar="PICKLE")
 	(options, args) = parser.parse_args()
-
 
 	if len(args) == 0:
 		try:
@@ -79,7 +73,4 @@ if __name__ == "__main__":
 			print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
 	else:
 		print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
-
-
-
 
