@@ -40,10 +40,17 @@ class Puzzle:
 				self.array[i].join()
 
 	def move(self, agent, new_position):
-		if self.lock_table[new_position].acquire(False) && self.lock_table[id_agent.position].acquire():
-			
-			self.lock_table[new_position].release()
-			return True
+		if self.lock_table[new_position].acquire(False) && self.lock_table[agent.position].acquire(False):
+			if self.puzzle[new_position] == 0:
+				self.array[new_position] = agent
+				self.array[agent.position] = 0
+				self.lock_table[new_position].release()
+				self.lock_table[new_position].release()
+				return True
+			else:
+				self.lock_table[new_position].release()
+				self.lock_table[new_position].release()
+				return False
 		else:
 			return False
 
