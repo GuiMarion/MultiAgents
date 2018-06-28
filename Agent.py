@@ -1,5 +1,6 @@
 from threading import Thread
 from math import sqrt
+import time
 
 class Agent(Thread):
 	def __init__(self, id, position, goal, puzzle):
@@ -14,41 +15,49 @@ class Agent(Thread):
 		return str(self.id)
 
 	def run(self):
+
 		#print("Agent " + str(self.id) + " : je suis à la position " + str(self.position) + " et je vais à la position " + str(self.goal))
-		
+
+		while self.puzzle.Start == False: 
+			time.sleep(0.001)
+
 		print("Mon objectif est :", self.goal)
 		# while self.position != self.goal:
 
-		n = self.puzzle.n
+		while self.puzzle.Stop == False:
 
-		x = self.position // n
-		y = self.position % n 
+			if self.position != self.goal:
 
-		x_goal = self.goal // n
-		y_goal = self.goal % n
+				n = self.puzzle.n
 
-		dico = {}
+				x = self.position // n
+				y = self.position % n 
 
-		dico['U'] = abs(x - 1  - x_goal) + abs(y - y_goal)
-		dico['D'] = abs(x + 1 - x_goal) + abs(y - y_goal)
-		dico['L'] = abs(x - x_goal) + abs(y - 1 - y_goal)
-		dico['R'] = abs(x - x_goal) + abs(y + 1 - y_goal)
+				x_goal = self.goal // n
+				y_goal = self.goal % n
 
-		min = 2*self.puzzle.n
-		minkey = None
+				dico = {}
 
-		for key in dico :
-			if dico[key] < min: 
-				min = dico[key]
-				minkey = key
-		print(dico)
+				dico['U'] = abs(x - 1  - x_goal) + abs(y - y_goal)
+				dico['D'] = abs(x + 1 - x_goal) + abs(y - y_goal)
+				dico['L'] = abs(x - x_goal) + abs(y - 1 - y_goal)
+				dico['R'] = abs(x - x_goal) + abs(y + 1 - y_goal)
 
-		self.go(minkey)
+				min = 2*self.puzzle.n
+				minkey = None
+
+				for key in dico :
+					if dico[key] < min: 
+						min = dico[key]
+						minkey = key
+				print(dico)
+
+				self.go(minkey)
 
 
 	def go(self, direction):
 
-		print("Kikou, j'aimerais bien me déplacer en :", direction)
+		print("Agent", self.id,", j'aimerais bien me déplacer en :", direction)
 
 		if(direction == 'U'): # 'U' for 'UP'
 			if(self.position >= self.puzzle.n):

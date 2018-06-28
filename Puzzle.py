@@ -9,7 +9,12 @@ class Puzzle:
 		self.n = n
 		self.size = n * n
 		self.array = [0] * self.size
-		self.lock_table = [Lock()] * self.size
+		self.lock_table = [] 
+		self.Start = False
+		self.Stop = False
+		for i in range(self.size):
+			#self.lock_table.append(Lock())
+			self.lock_table.append(True)
 
 		if(nb_agents > n*n):
 			raise ValueError("The number of agents must be less then n*n")
@@ -34,19 +39,28 @@ class Puzzle:
 		return toBePrint
 
 	def run(self):
+		L = []
 		for i in range(0, self.size):
 			if(self.array[i] != 0):
 				self.array[i].start()
-				self.array[i].join()
+				L.append(self.array[i])
+		self.Start = True
 
-	def move(self, agent, new_position):
+		end = False
+		while end == False:
+			end = True
+			for elem in L :
+				if elem.position != elem.goal:
+					end = False
 
-		#print(self.lock_table[agent.position].acquire(False))
-		#self.lock_table[agent.position].release()
-		#print(self.lock_table[new_position].acquire(False))
+		self.Stop = True
+
+	def move2(self, agent, new_position):
 
 		if self.lock_table[new_position].acquire(False) and self.lock_table[agent.position].acquire(False):
-			if self.puzzle[new_position] == 0:
+			self.lock_table[agent.position].acquire(False)
+			self.lock_table[new_position].acquire(False)
+			if self.array[new_position] == 0:
 				self.array[new_position] = agent
 				self.array[agent.position] = 0
 				agent.position = new_position
@@ -57,6 +71,37 @@ class Puzzle:
 			else:
 				self.lock_table[new_position].release()
 				self.lock_table[agent.position].release()
+				return False
+		else:
+			return False
+
+	def acquire(self, index):
+		if self.lock_table[index]:
+			self.lock_table[index] = False
+			return True
+		else: 
+			return False
+
+	def release(self, index):
+		self.lock_table[index] = True
+
+
+	def move(self, agent, new_position):
+
+		old_position = agent.position
+
+		if self.acquire(new_position) and self.acquire(agent.position):
+			if self.array[new_position] == 0:
+				self.array[new_position] = agent
+				self.array[agent.position] = 0
+				agent.position = new_position
+				self.release(new_position)
+				self.release(old_position)
+				print(self)
+				return True
+			else:
+				self.release(new_position)
+				self.release(old_position)
 				return False
 		else:
 			return False
@@ -80,7 +125,7 @@ if __name__ == "__main__":
 			elif options.size is None and options.nb_agents is not None:
 				main(nb_agents = int(options.nb_agents))
 			elif options.size is not None and options.nb_agents is None:
-				main(nb_agents = int(options.size))
+				main(size = int(options.size))
 			else:
 				main()
 		# print(distributions[(15,15,0)])
