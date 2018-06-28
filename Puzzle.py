@@ -1,36 +1,85 @@
 from random import randint
 from math import sqrt
 from Agent import Agent
+from optparse import OptionParser
+
 
 
 class Puzzle:
 
-	# @filling : un pourcentage entre 0 et 1
-	def __init__(self, n, filling):
+	def __init__(self, n, nb_agents):
+		self.n = n
 		self.size = n * n
-		self.agents = [0] * self.size
+		self.array = [0] * self.size
 
-		for i in range(1, round(filling * self.size) + 1):
+		if nb_agents > n*n :
+			raise ValueError("The number of agents must be less then n*n")
+
+		for i in range(nb_agents):
 			candidate = randint(0, self.size - 1)
-			if(self.agents[candidate] == 0):
+			goal = randint(0, self.size - 1)
+
+
+			while(self.array[candidate] != 0 or self.array[goal] != 0):
+				candidate = randint(0, self.size - 1)
 				goal = randint(0, self.size - 1)
-				self.agents[candidate] = Agent(i, candidate, goal)
-			else:
-				i = i - 1
+
+			self.array[candidate] = Agent(i+1, candidate, goal, self)
 
 	def __repr__(self):
 		toBePrint = ""
-		for i in range(1, self.size + 1):
-			if(self.agents[i - 1] != 0):
-				toBePrint += " {:>2} ".format(print(self.agents[i - 1]))
+		for i in range(self.size):
+			if(self.array[i] != 0):
+				toBePrint += " {:>2} ".format(str(self.array[i]))
 			else:
 				toBePrint += " {:>2} ".format('×')
-			if(i % sqrt(self.size) == 0):
+			if((	i+1) % self.n == 0):
 				toBePrint += "\n"
 		return toBePrint
 
 	def run(self):
 		for i in range(0, self.size):
-			if(self.agents[i] != 0):
-				self.agents[i].start()
-				self.agents[i].join()
+			if(self.array[i] != 0):
+				self.array[i].start()
+				self.array[i].join()
+
+	def move(self, id):
+		print(id,"m'a appelé.")
+
+
+
+
+def main(size = 5, nb_agents = 1):
+
+	P = Puzzle(size, nb_agents)
+	print(P)
+
+
+if __name__ == "__main__":
+	parser = OptionParser()
+	parser.add_option("-s", "--size", dest="size", help="n for the array (that is of size n*n)", metavar="SIZE")
+	parser.add_option("-a", "--nb_agents", dest="nb_agents", help="number of agents", metavar="AGENTS")
+
+	#parser.add_option("-p", "--pickle", action="store_true", dest="pickle", help="create pickles", metavar="PICKLE")
+	(options, args) = parser.parse_args()
+
+
+	if len(args) == 0:
+		try:
+			if options.size is not None and options.nb_agents is not None:
+				main(size = int(options.size), nb_agents = int(options.nb_agents))
+			elif options.size is None and options.nb_agents is not None:
+				main(nb_agents = int(options.nb_agents))
+			elif options.size is not None and options.nb_agents is None:
+				main(nb_agents = int(options.size))
+			else:
+				main()
+		# print(distributions[(15,15,0)])
+		except ValueError:
+			print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
+	else:
+		print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
+
+
+
+
