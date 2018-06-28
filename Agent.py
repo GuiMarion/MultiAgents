@@ -23,6 +23,16 @@ class Agent(Thread):
 		dico['L'] = abs((self.position - 1) // n - (self.goal //n)) + abs((self.position - 1) % n - (self.goal % n))	
 		dico['R'] = abs((self.position + 1) // n - (self.goal //n)) + abs((self.position + 1) % n - (self.goal % n))	
 
+		min = 2*self.puzzle.n
+		minkey = None
+
+		for key in dico :
+			if dico[key] < min: 
+				min = dico[key]
+				minkey = key
+
+		go(minkey)
+
 
 	def go(direction):
 		if(direction == 'U'): # 'U' for 'UP'
