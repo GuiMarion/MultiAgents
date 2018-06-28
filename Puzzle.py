@@ -44,6 +44,7 @@ class Puzzle:
 			if self.puzzle[new_position] == 0:
 				self.array[new_position] = agent
 				self.array[agent.position] = 0
+				agent.position = new_position
 				self.lock_table[new_position].release()
 				self.lock_table[new_position].release()
 				return True
