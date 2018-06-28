@@ -16,9 +16,12 @@ class Agent(Thread):
 		print("Agent " + str(self.id) + " : je suis à la position " + str(self.position) + " et je vais à la position " + str(self.goal))
 		# while self.position != self.goal:
 
-		#dico = {}
+		dico = {}
 
-		#dico['U'] = abs(self.position // n, )	
+		dico['U'] = abs((self.position - self.puzzle.n) // n - (self.goal //n)) + abs((self.position - self.puzzle.n) % n - (self.goal % n))	
+		dico['D'] = abs((self.position + self.puzzle.n) // n - (self.goal //n)) + abs((self.position + self.puzzle.n) % n - (self.goal % n))
+		dico['L'] = abs((self.position - 1) // n - (self.goal //n)) + abs((self.position - 1) % n - (self.goal % n))	
+		dico['R'] = abs((self.position + 1) // n - (self.goal //n)) + abs((self.position + 1) % n - (self.goal % n))	
 
 
 	def go(direction):
