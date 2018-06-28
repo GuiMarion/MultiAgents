@@ -40,17 +40,23 @@ class Puzzle:
 				self.array[i].join()
 
 	def move(self, agent, new_position):
-		if self.lock_table[new_position].acquire(False) && self.lock_table[agent.position].acquire(False):
+
+		#print(self.lock_table[agent.position].acquire(False))
+		#self.lock_table[agent.position].release()
+		#print(self.lock_table[new_position].acquire(False))
+
+		if self.lock_table[new_position].acquire(False) and self.lock_table[agent.position].acquire(False):
 			if self.puzzle[new_position] == 0:
 				self.array[new_position] = agent
 				self.array[agent.position] = 0
 				agent.position = new_position
 				self.lock_table[new_position].release()
-				self.lock_table[new_position].release()
+				self.lock_table[agent.position].release()
+				print(self)
 				return True
 			else:
 				self.lock_table[new_position].release()
-				self.lock_table[new_position].release()
+				self.lock_table[agent.position].release()
 				return False
 		else:
 			return False
@@ -58,6 +64,7 @@ class Puzzle:
 def main(size = 5, nb_agents = 1):
 	P = Puzzle(size, nb_agents)
 	print(P)
+	P.run()
 
 if __name__ == "__main__":
 	parser = OptionParser()
