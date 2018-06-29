@@ -5,13 +5,16 @@ from optparse import OptionParser
 from threading import Lock
 
 class Puzzle:
-	def __init__(self, n, nb_agents):
+	def __init__(self, n, nb_agents, to_print):
 		self.n = n
 		self.size = n * n
 		self.array = [0] * self.size
 		self.lock_table = [] 
 		self.Start = False
 		self.Stop = False
+		self.to_print = to_print
+		self.nb_coups = 0
+
 		for i in range(self.size):
 			#self.lock_table.append(Lock())
 			self.lock_table.append(True)
@@ -19,13 +22,17 @@ class Puzzle:
 		if(nb_agents > n*n):
 			raise ValueError("The number of agents must be less then n*n")
 
+		Goals = []
+
 		for i in range(nb_agents):
 			candidate = randint(0, self.size - 1)
 			goal = randint(0, self.size - 1)
-			while(self.array[candidate] != 0 or self.array[goal] != 0):
+			while(self.array[candidate] != 0 or goal in Goals):
 				candidate = randint(0, self.size - 1)
 				goal = randint(0, self.size - 1)
+
 			self.array[candidate] = Agent(i + 1, candidate, goal, self)
+			Goals.append(goal)
 
 	def __repr__(self):
 		toBePrint = ""
@@ -97,7 +104,9 @@ class Puzzle:
 				agent.position = new_position
 				self.release(new_position)
 				self.release(old_position)
-				print(self)
+				if self.to_print:
+					print(self)
+				self.nb_coups += 1
 				return True
 			else:
 				self.release(new_position)
@@ -106,31 +115,52 @@ class Puzzle:
 		else:
 			return False
 
-def main(size = 5, nb_agents = 1):
-	P = Puzzle(size, nb_agents)
-	print(P)
+def main(size = 5, nb_agents = 1, to_print = True):
+
+	to_print = to_print
+	P = Puzzle(size, nb_agents, to_print)
+	if to_print:
+		print(P)
 	P.run()
+
+	print("Number of steps :", P.nb_coups)
+
+	return P.nb_coups
 
 if __name__ == "__main__":
 	parser = OptionParser()
 	parser.add_option("-s", "--size", dest="size", help="n for the array (that is of size n*n)", metavar="SIZE")
 	parser.add_option("-a", "--nb_agents", dest="nb_agents", help="number of agents", metavar="AGENTS")
+	parser.add_option("-p", "--dontprint", action="store_true", dest="to_print", help="if you don't want to print", metavar="PRINT")
+	parser.add_option("-r", "--repetitions", dest="repetitions", help="number of repetitions", metavar="REPETITIONS")
 
 	(options, args) = parser.parse_args()
 
 	if len(args) == 0:
+		to_print = True
+		if options.to_print is not None:
+			to_print = False
+
+		if options.repetitions is None:
+			options.repetitions = 1
+
+		moy = 0
 		try:
-			if options.size is not None and options.nb_agents is not None:
-				main(size = int(options.size), nb_agents = int(options.nb_agents))
-			elif options.size is None and options.nb_agents is not None:
-				main(nb_agents = int(options.nb_agents))
-			elif options.size is not None and options.nb_agents is None:
-				main(size = int(options.size))
-			else:
-				main()
-		# print(distributions[(15,15,0)])
+			for i in range(int(options.repetitions)):
+				if options.size is not None and options.nb_agents is not None:
+					moy += main(size = int(options.size), nb_agents = int(options.nb_agents), to_print = to_print)
+				elif options.size is None and options.nb_agents is not None:
+					moy += main(nb_agents = int(options.nb_agents), to_print = to_print)
+				elif options.size is not None and options.nb_agents is None:
+					moy += main(size = int(options.size), to_print = to_print)
+				else:
+					moy += main(to_print = to_print)
+
+			print("Nombre de coups moyen :",moy/int(options.repetitions))
+
 		except ValueError:
-			print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
+			print("Please provide integers as options")
+			exit(1)
 	else:
 		print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
 
