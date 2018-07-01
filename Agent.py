@@ -2,6 +2,7 @@ from threading import Thread
 from math import sqrt
 import time
 from random import *
+import os
 
 class Agent(Thread):
 	def __init__(self, id, position, goal, puzzle):
@@ -14,12 +15,16 @@ class Agent(Thread):
 		self.n = self.puzzle.n
 		self.target = (None, -1)
 		self.dontmove = False
+		self.time_start = time.time()
 
 
 	def __repr__(self):
 		return str(self.id)
 
 	def get_direction(self):
+
+		if self.position == self.goal:
+			return "OK"
 
 		n = self.puzzle.n
 
@@ -62,27 +67,38 @@ class Agent(Thread):
 
 		while self.puzzle.Stop == False:
 
+			if abs(time.time() - self.time_start) > 10:
+				print("It seems that we are in a bad position, let's see : ")
+				print(self.puzzle)
+				os._exit(1)
+
 			# We don't move until the target changes its position
 			ok = True
 			if self.dontmove:
-				if self.target[0].position == self.target[1]:
+				if self.target[0].position == self.target[1] and abs(time.time() - self.time_start) < 1:
 					ok = False
 				else:
 					self.dontmove = False
+					self.taget = (None, -1)
 
 			if ok :
 
 				if self.must_move:
 
-					# It's possible to be better by choosing a moove that minimizes the
-					# number of steps
-
 					directions = {}
 
 					directions['U'] = self.position - self.n
 					directions['D'] = self.position + self.n
-					directions['L'] = self.position - 1
-					directions['R'] = self.position + 1
+
+					if (self.position) % 5 != 0:
+						directions['L'] = self.position - 1
+					else:
+						directions['L'] = -1
+
+					if (self.position + 1) % 5 != 0:
+						directions['R'] = self.position + 1
+					else:
+						directions['R'] = -1	
 
 					L = []
 
@@ -92,6 +108,17 @@ class Agent(Thread):
 
 					# If there is a least one free move we choose one uniformly
 					if len(L) > 0:
+
+						moves = []
+
+						# We prefer to choose the orthogonal ones
+						for move in L :
+							if self.is_orthogonal(move):
+								moves.append(move)
+
+						if len(moves) >  0:
+							L = moves
+
 						d = randint(0, len(L)-1)
 
 						self.dontmove = True
@@ -100,10 +127,28 @@ class Agent(Thread):
 						self.go(L[d])
 
 					else:
-						raise NotImplemented("An agent is bloqued")
+
+						# The agent must move but it's blocked by others
+
+						# TODO
+						# We can maybe choose a better moove that minimises number of steps
+
+						print("kikou")
+
+						neibo = [self.position - self.n, self.position + self.n,\
+						self.position - 1, self.position + 1]
+
+						for elem in neibo :
+							if elem < self.puzzle.size and elem >= 0 and self.puzzle.array[elem] != 0:
+								self.puzzle.array[elem].please_move(self) 
+
+
+						#raise NotImplemented("An agent is bloqued")
 
 
 				elif self.position != self.goal:
+
+					# There is no constraint on the agent.
 
 					n = self.puzzle.n
 
@@ -211,11 +256,32 @@ class Agent(Thread):
 		else: 
 			return False
 
+	def is_orthogonal(self, move):
+
+		Me = self.get_direction()
+
+		if Me == 'D' and move == 'U':
+			return False
+
+		elif Me == 'U' and move == 'D':
+			return False
+
+		elif Me == 'L' and move == 'R':
+			return False
+
+		elif Me == 'R' and move == 'L':
+			return False
+
+		else: 
+			return True
+
 	def please_move(self, Gus):
 
 		# If the agent is not on its goal, there's no problem
 		# because it wants to move even if it don't catch any ask.
 		if self.position == self.goal or self.is_direction_opposed(Gus):
+			#if self.position != self.goal:
+		#		print("On est dedans", self.id)
 			self.must_move = True
 			self.dontmove = False
 			self.target = (Gus, Gus.position)
