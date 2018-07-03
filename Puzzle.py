@@ -3,6 +3,7 @@ from math import sqrt
 from Agent import Agent
 from optparse import OptionParser
 from threading import Lock
+from datetime import datetime
 
 class Puzzle:
 	def __init__(self, n, nb_agents, to_print):
@@ -14,6 +15,7 @@ class Puzzle:
 		self.Stop = False
 		self.to_print = to_print
 		self.nb_coups = 0
+		self.Fail = False
 
 		for i in range(self.size):
 			#self.lock_table.append(Lock())
@@ -54,7 +56,7 @@ class Puzzle:
 		self.Start = True
 
 		end = False
-		while end == False:
+		while end == False and self.Stop == False:
 			end = True
 			for elem in L :
 				if elem.position != elem.goal:
@@ -123,7 +125,11 @@ def main(size = 5, nb_agents = 1, to_print = True):
 		print(P)
 	P.run()
 
-	print("Number of steps :", P.nb_coups)
+	if to_print:
+		print("Number of steps :", P.nb_coups)
+
+	if P.Fail:
+		return -1
 
 	return P.nb_coups
 
@@ -133,10 +139,60 @@ if __name__ == "__main__":
 	parser.add_option("-a", "--nb_agents", dest="nb_agents", help="number of agents", metavar="AGENTS")
 	parser.add_option("-p", "--dontprint", action="store_true", dest="to_print", help="if you don't want to print", metavar="PRINT")
 	parser.add_option("-r", "--repetitions", dest="repetitions", help="number of repetitions", metavar="REPETITIONS")
+	parser.add_option("-t", "--test", action="store_true", dest="test", help="if you want to run the stats", metavar="TEST")
 
 	(options, args) = parser.parse_args()
 
-	if len(args) == 0:
+	if options.test :
+
+		# Options that does the stats
+
+		## Size max
+		N = 5
+		## Max fill
+		C = 0.4
+		# Nomber of répétitions
+		R = 1
+
+		file = open("Stats_"+datetime.now().strftime('%Y-%m-%d__%H:%M'),'w')
+
+		print("Running the script for computing stats (may that a while).")
+		file.write("Running the script for computing stats (may that a while). \n \n")
+
+		for n in range(2, N+1):
+			for nb_agents in range(1, int(n*n*C)):
+				moy = 0
+				fails = 0
+				for i in range(R):
+					res = main(size = n, nb_agents = nb_agents, to_print = False)
+					if res != -1:
+						moy += res
+					else:
+						fails += 1
+
+
+				moy = moy/R
+
+				if fails == R :
+					moy = None
+
+				print("n =", n, " ", nb_agents, "agents :")
+				print("Average number of steps :", moy)
+				if fails > 0 :
+					print("Number of fails :", fails)
+				print()
+
+				file.write("n = " + str(n) + "  " + str(nb_agents) + " agents :\n")
+				file.write("Average number of steps : " + str(moy) + "\n")
+				if fails > 0 :
+					file.write("Number of fails :" + str(fails) + "\n")
+				file.write("\n")
+
+
+		file.close()
+
+
+	elif len(args) == 0:
 		to_print = True
 		if options.to_print is not None:
 			to_print = False
@@ -156,7 +212,7 @@ if __name__ == "__main__":
 				else:
 					moy += main(to_print = to_print)
 
-			print("Nombre de coups moyen :",moy/int(options.repetitions))
+			print("Average number of steps :",moy/int(options.repetitions))
 
 		except ValueError:
 			print("Please provide integers as options")
