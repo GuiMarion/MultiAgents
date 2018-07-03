@@ -10,7 +10,7 @@ import os
 
 THRESHOLD_STUCK = 15
 RANDOM_MOVE = 7
-MAX_TIME = 0.4
+MAX_TIME = 100
 MAX_DONT_MOVE = 1
 
 class Agent(Thread):
@@ -443,8 +443,10 @@ class Agent(Thread):
 
 			try : 
 
+				if d > self.puzzle.size or d < 0:
+					pass
 
-				if self.puzzle.array[d] != 0 and pos == self.position:
+				elif self.puzzle.array[d] != 0 and pos == self.position:
 
 				# Case where there is a inter-block such as : 
 				# 1 -> 2
@@ -458,7 +460,7 @@ class Agent(Thread):
 				print("IndexError")
 				print(d, ":",self.id)
 				print(self.puzzle)
-				os._exit(1)
+				self.puzzle.Stop = True
 
 
 

@@ -152,12 +152,12 @@ if __name__ == "__main__":
 		## Max fill
 		C = 0.4
 		# Nomber of répétitions
-		R = 1
+		R = 100
 
 		file = open("Stats_"+datetime.now().strftime('%Y-%m-%d__%H:%M'),'w')
 
-		print("Running the script for computing stats (may that a while).")
-		file.write("Running the script for computing stats (may that a while). \n \n")
+		print("Running the script for computing stats with", R,"repetitions", "(may that a while).")
+		file.write("Running the script for computing stats with " + str(R) + " repetitions (may that a while). \n \n")
 
 		for n in range(2, N+1):
 			for nb_agents in range(1, int(n*n*C)):
