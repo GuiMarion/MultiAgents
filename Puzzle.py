@@ -5,6 +5,15 @@ from optparse import OptionParser
 from threading import Lock
 from datetime import datetime
 
+## Parameters for the stats
+
+## Size max
+N = 10
+## Max fill
+C = 0.4
+# Nomber of répétitions
+R = 100
+
 class Puzzle:
 	def __init__(self, n, nb_agents, to_print):
 		self.n = n
@@ -147,14 +156,7 @@ if __name__ == "__main__":
 
 		# Options that does the stats
 
-		## Size max
-		N = 5
-		## Max fill
-		C = 0.4
-		# Nomber of répétitions
-		R = 100
-
-		file = open("Stats_"+datetime.now().strftime('%Y-%m-%d__%H:%M'),'w')
+		file = open("Stats_"+datetime.now().strftime('%Y-%m-%d__%H-%M'),'w')
 
 		print("Running the script for computing stats with", R,"repetitions", "(may that a while).")
 		file.write("Running the script for computing stats with " + str(R) + " repetitions (may that a while). \n \n")
