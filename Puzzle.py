@@ -2,7 +2,6 @@ from random import randint
 from math import sqrt
 from Agent import Agent
 from optparse import OptionParser
-from threading import Lock
 from datetime import datetime
 
 ## Parameters for the stats
@@ -27,7 +26,6 @@ class Puzzle:
 		self.Fail = False
 
 		for i in range(self.size):
-			#self.lock_table.append(Lock())
 			self.lock_table.append(True)
 
 		if(nb_agents > n*n):
@@ -73,26 +71,6 @@ class Puzzle:
 
 		self.Stop = True
 
-	def move2(self, agent, new_position):
-
-		if self.lock_table[new_position].acquire(False) and self.lock_table[agent.position].acquire(False):
-			self.lock_table[agent.position].acquire(False)
-			self.lock_table[new_position].acquire(False)
-			if self.array[new_position] == 0:
-				self.array[new_position] = agent
-				self.array[agent.position] = 0
-				agent.position = new_position
-				self.lock_table[new_position].release()
-				self.lock_table[agent.position].release()
-				print(self)
-				return True
-			else:
-				self.lock_table[new_position].release()
-				self.lock_table[agent.position].release()
-				return False
-		else:
-			return False
-
 	def acquire(self, index):
 		if self.lock_table[index]:
 			self.lock_table[index] = False
@@ -103,9 +81,7 @@ class Puzzle:
 	def release(self, index):
 		self.lock_table[index] = True
 
-
 	def move(self, agent, new_position):
-
 		old_position = agent.position
 
 		if self.acquire(new_position) and self.acquire(agent.position):
@@ -127,7 +103,6 @@ class Puzzle:
 			return False
 
 def main(size = 5, nb_agents = 1, to_print = True):
-
 	to_print = to_print
 	P = Puzzle(size, nb_agents, to_print)
 	if to_print:
@@ -221,4 +196,3 @@ if __name__ == "__main__":
 			exit(1)
 	else:
 		print("Usage: Python3 Puzzle.py -s <size> -a <nb_agents> with integers")
-

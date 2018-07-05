@@ -461,10 +461,3 @@ class Agent(Thread):
 				print(d, ":",self.id)
 				print(self.puzzle)
 				self.puzzle.Stop = True
-
-
-
-
-
-
-
