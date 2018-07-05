@@ -5,14 +5,6 @@ from random import *
 import os
 
 
-# TODO 
-# Tweak these parameters in order to improve average number of steps
-
-THRESHOLD_STUCK = 15
-RANDOM_MOVE = 7
-MAX_TIME = 100
-MAX_DONT_MOVE = 1
-
 class Agent(Thread):
 	def __init__(self, id, position, goal, puzzle):
 		Thread.__init__(self)
@@ -28,6 +20,12 @@ class Agent(Thread):
 		self.time_last = time.time()
 		self.Seen = [0] * self.puzzle.size
 		self.must_move_randomly_for = 0
+
+		# Tweak these parameters in order to improve average number of steps
+		self.THRESHOLD_STUCK = 3 * self.puzzle.n
+		self.RANDOM_MOVE = 2 * self.puzzle.n
+		self.MAX_TIME = 10 * self.puzzle.size
+		self.MAX_DONT_MOVE = int(0.2 * self.puzzle.n)
 
 
 	def __repr__(self):
@@ -57,7 +55,7 @@ class Agent(Thread):
 
 		while self.puzzle.Stop == False:
 
-			if abs(time.time() - self.time_start) > MAX_TIME:
+			if abs(time.time() - self.time_start) > self.MAX_TIME:
 				#print("It seems that we are in a bad position, let's see : ")
 				#print("Nombre de coups :", self.puzzle.nb_coups)
 				#print(self.puzzle)
@@ -69,7 +67,7 @@ class Agent(Thread):
 			# We don't move until the target changes its position
 			ok = True
 			if self.dontmove:
-				if self.target[0].position == self.target[1] and abs(time.time() - self.time_last) < MAX_DONT_MOVE:
+				if self.target[0].position == self.target[1] and abs(time.time() - self.time_last) < self.MAX_DONT_MOVE:
 					ok = False
 				else:
 					if abs(time.time() - self.time_last) >= 1:
@@ -79,17 +77,17 @@ class Agent(Thread):
 
 			if ok :
 
-				if self.Seen[self.position] > THRESHOLD_STUCK:
+				if self.Seen[self.position] > self.THRESHOLD_STUCK:
 					#print("STUCK")
 
 					# The agent is stuck in a position
 
 					M = self.get_random_moove()
 
-					if self.Seen[self.get_value_from_direction(M)] < THRESHOLD_STUCK:
+					if self.Seen[self.get_value_from_direction(M)] < self.THRESHOLD_STUCK:
 						self.Seen[self.position] = 0
 
-					self.must_move_randomly_for = RANDOM_MOVE
+					self.must_move_randomly_for = self.RANDOM_MOVE
 					self.go(M)
 
 				elif self.must_move_randomly_for > 0:
@@ -443,7 +441,8 @@ class Agent(Thread):
 
 			try : 
 
-				if d > self.puzzle.size or d < 0:
+				if d >= self.puzzle.size or d < 0:
+					print(self.id + ".get_direction_value() = " + d)
 					pass
 
 				elif self.puzzle.array[d] != 0 and pos == self.position:
