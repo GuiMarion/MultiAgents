@@ -1,0 +1,202 @@
+Running the script for computing stats with 100 repetitions (may that a while). 
+ 
+n = 3  1 agents :
+Average number of steps : 1.83
+
+n = 3  2 agents :
+Average number of steps : 3.98
+
+n = 4  1 agents :
+Average number of steps : 2.6
+
+n = 4  2 agents :
+Average number of steps : 5.35
+
+n = 4  3 agents :
+Average number of steps : 8.89
+
+n = 4  4 agents :
+Average number of steps : 13.44
+Number of fails :1
+
+n = 4  5 agents :
+Average number of steps : 21.31
+Number of fails :2
+
+n = 5  1 agents :
+Average number of steps : 3.27
+
+n = 5  2 agents :
+Average number of steps : 6.52
+
+n = 5  3 agents :
+Average number of steps : 11.03
+
+n = 5  4 agents :
+Average number of steps : 14.84
+
+n = 5  5 agents :
+Average number of steps : 21.08
+
+n = 5  6 agents :
+Average number of steps : 26.9
+
+n = 5  7 agents :
+Average number of steps : 44.02
+
+n = 5  8 agents :
+Average number of steps : 62.19
+
+n = 5  9 agents :
+Average number of steps : 75.49
+
+n = 6  1 agents :
+Average number of steps : 3.89
+
+n = 6  2 agents :
+Average number of steps : 8.03
+
+n = 6  3 agents :
+Average number of steps : 13.85
+
+n = 6  4 agents :
+Average number of steps : 17.27
+
+n = 6  5 agents :
+Average number of steps : 23.2
+
+n = 6  6 agents :
+Average number of steps : 28.91
+
+n = 6  7 agents :
+Average number of steps : 38.38
+
+n = 6  8 agents :
+Average number of steps : 44.58
+
+n = 6  9 agents :
+Average number of steps : 56.34
+
+n = 6  10 agents :
+Average number of steps : 70.51
+Number of fails :3
+
+n = 6  11 agents :
+Average number of steps : 93.7
+Number of fails :2
+
+n = 6  12 agents :
+Average number of steps : 123.88
+Number of fails :5
+
+n = 6  13 agents :
+Average number of steps : 143.86
+Number of fails :2
+
+n = 7  1 agents :
+Average number of steps : 4.45
+
+n = 7  2 agents :
+Average number of steps : 10.11
+
+n = 7  3 agents :
+Average number of steps : 14.34
+
+n = 7  4 agents :
+Average number of steps : 20.15
+
+n = 7  5 agents :
+Average number of steps : 26.95
+
+n = 7  6 agents :
+Average number of steps : 31.88
+
+n = 7  7 agents :
+Average number of steps : 40.52
+Number of fails :1
+
+n = 7  8 agents :
+Average number of steps : 44.81
+Number of fails :1
+
+n = 7  9 agents :
+Average number of steps : 56.55
+Number of fails :2
+
+n = 7  10 agents :
+Average number of steps : 67.51
+Number of fails :2
+
+n = 7  11 agents :
+Average number of steps : 79.36
+Number of fails :1
+
+n = 7  12 agents :
+Average number of steps : 91.39
+
+n = 7  13 agents :
+Average number of steps : 109.34
+Number of fails :3
+
+n = 7  14 agents :
+Average number of steps : 134.18
+Number of fails :3
+
+n = 7  15 agents :
+Average number of steps : 145.84
+Number of fails :4
+
+n = 7  16 agents :
+Average number of steps : 178.2
+Number of fails :9
+
+n = 7  17 agents :
+Average number of steps : 186.28
+Number of fails :7
+
+n = 7  18 agents :
+Average number of steps : 222.75
+Number of fails :7
+
+n = 8  1 agents :
+Average number of steps : 5.8
+
+n = 8  2 agents :
+Average number of steps : 11.17
+
+n = 8  3 agents :
+Average number of steps : 16.46
+
+n = 8  4 agents :
+Average number of steps : 22.92
+
+n = 8  5 agents :
+Average number of steps : 28.77
+Number of fails :1
+
+n = 8  6 agents :
+Average number of steps : 36.59
+
+n = 8  7 agents :
+Average number of steps : 43.99
+
+n = 8  8 agents :
+Average number of steps : 49.3
+
+n = 8  9 agents :
+Average number of steps : 58.95
+
+n = 8  10 agents :
+Average number of steps : 69.64
+
+n = 8  11 agents :
+Average number of steps : 79.79
+
+n = 8  12 agents :
+Average number of steps : 82.33
+Number of fails :3
+
+n = 8  13 agents :
+Average number of steps : 103.37
+Number of fails :2
+
