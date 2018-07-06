@@ -1,6 +1,6 @@
 # MultiAgents
 
-MultiAgents project for a lab at the University Lyon 1.
+MultiAgents project for a lab at the University Lyon 1 implementing Multi Agent Sytem with multi-threading, please consult Rapport.pdf for more details.
 
 ## How to use it
 
@@ -22,3 +22,4 @@ Run tests and write summary in an output file : for each size of grid between 2 
 ## Contribute
 
 The code is available on [GitHub](https://github.com/GuiMarion/MultiAgents).
+Feel free to contact us for any request. 
