@@ -21,15 +21,24 @@
 
 \section{Structure du programme}
 
+Notre programme, écrit en Python 3, est composé de deux fichiers
+
 Puzzle.py 
 
 Agent.py, une classe pour chaque agent qui est créé, chaque agent est un thread
+
+Dans la suite de ce rapport, nous prendrons pour chaque exemple une grille de taille $n \times n$ avec $n = 5$, mais ce paramètre est évidemment modifiable.
 
 \section{Construction des cas}
 
 \subsection{Le cas à un agent}
 
-Dans le cas d'un quadrillage comme ici, la distance de Manhattan, donnée par la formule ci-dessous, est plus adaptée que la classique distance euclidienne. Elle est exactement le nombre de mouvement devrait parcourir le
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/base_case.png}
+\end{figure}
+
+C’est le cas le plus simple du programme. L'agent est seul sur la grille et a un objectif. Tant qu'il n'est pas sur sa case d'arrivée, l'agent calcule la distance par rapport à celle-ci pour chacune des cases sur laquelle il peut se déplacer. Dans le cas d'un quadrillage comme ici, la distance de Manhattan, donnée par la formule ci-dessous, est plus adaptée que la classique distance euclidienne.
 
 \[
 d(a, b) = |x_a - x_b| + |y_b - y_a|
@@ -37,10 +46,7 @@ d(a, b) = |x_a - x_b| + |y_b - y_a|
 
 Dans le cas où deux directions sont possibles pour une distance de Manhattan, on choisit aléatoirement une des deux directions.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=200px]{images/manhattan_equal.png}
-\end{figure}
+
 
 \begin{figure}[h]
 	\centering
@@ -60,5 +66,12 @@ Chaque agent cognitif doit être doté de capacités de raisonnement et de réac
 	\centering
 	\includegraphics[width=200px]{images/4_agents.png}
 \end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/manhattan_equal.png}
+\end{figure}
+
+\section{}
 
 \end{document}
