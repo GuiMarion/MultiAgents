@@ -7,6 +7,13 @@
 
 \usepackage{geometry}
 \usepackage{graphicx}
+\usepackage{tikz}
+
+\newcommand*\circled[1]{
+	\tikz[baseline=(char.base)]{
+		\node[shape=circle,draw,inner sep=2pt] (char) {#1};
+	}
+}
 
 % Define the margins
 \geometry{top=2cm,left=2cm, right=2cm, bottom=2cm}
@@ -21,11 +28,15 @@
 
 \section{Structure du programme}
 
-Notre programme, écrit en Python 3, est composé de deux fichiers
+Dans le cadre de l'UE Techniques de l'Intelligence Artificielle, nous avons construit un système multi-agents sur le modèle du jeu du taquin. Les agents sont dotés de capacités de raisonnement et de réactions indépendantes, ils sont capables de se déplacer sur la grille en même temps.
 
-Puzzle.py 
+Notre programme, écrit en Python 3, est composé de deux fichiers :
+\begin{itemize}
+	\item \texttt{Puzzle.py} qui 
+	\item \texttt{Agent.py}, une classe pour chaque agent qui est créé, chaque agent est un thread
+\end{itemize}
 
-Agent.py, une classe pour chaque agent qui est créé, chaque agent est un thread
+[…]
 
 Dans la suite de ce rapport, nous prendrons pour chaque exemple une grille de taille $n \times n$ avec $n = 5$, mais ce paramètre est évidemment modifiable.
 
@@ -44,34 +55,60 @@ C’est le cas le plus simple du programme. L'agent est seul sur la grille et a 
 d(a, b) = |x_a - x_b| + |y_b - y_a|
 \]
 
+C'est le sens du code situé dans le fichier \texttt{Agent.py} des lignes 186 à 204 : le programme stocke dans une variable \texttt{dico} les 4 distances calculées, puis sélectionne la plus faible. Il se dirige alors sur la case correspondante et recommence un cycle avec un nouveau calcul des distances.
+
 Dans le cas où deux directions sont possibles pour une distance de Manhattan, on choisit aléatoirement une des deux directions.
-
-
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=200px]{images/switch.png}
-\end{figure}
-
-Contraites :
-
-Chaque agent cognitif doit être doté de capacités de raisonnement et de réaction indépendantes, c'est le sens même de sa définition. Ici, chaque agent
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=200px]{images/3_agents.png}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=200px]{images/4_agents.png}
-\end{figure}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=200px]{images/manhattan_equal.png}
 \end{figure}
 
-\section{}
+Le cas à un agent ne présente aucun bloquage possible : l'agent arrive forcément sur sa case objectif, en empruntant le plus court chemin.
+
+\subsection{Le cas à deux agents}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/2_agents.png}
+\end{figure}
+
+[…………… à compléter ………………]
+
+
+Un premier cas pathologique peut apparaître dans cette configuration, comme le montre l'exemple ci-dessous.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/switch.png}
+\end{figure}
+
+Dans cette situation, l'agent \circled{1} souhaite se rendre sur la case située à droite de l'agent \circled{2} qui lui veut aller sur la case occupée par l'agent \circled{1}. Les deux agents s'envoyant des messages contradictoire, l'un va comprendre qu'il doit effectuer un mouvement orthogonal par rapport à l'autre agent afin de le laisser passer pour ensuite rejoindre sa place.
+
+
+\subsection{Le cas à trois agents}
+
+Dans cette situation, on peut faire face à un nouveau cas pathologique.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/3_agents.png}
+\end{figure}
+
+\subsection{Le cas à quatre agents}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/4_agents.png}
+\end{figure}
+
+\subsection{Le cas à cinq agents}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=200px]{images/5_agents.png}
+\end{figure}
+
+\section{Conclusion}
 
 \end{document}
