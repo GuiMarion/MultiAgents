@@ -95,6 +95,8 @@ Dans cette situation, on peut faire face à un nouveau cas pathologique.
 	\includegraphics[width=200px]{images/3_agents.png}
 \end{figure}
 
+L’agent \circled{1} n'est pas sur sa case d'objectif et est ici \og{} enfermé \fg{} : il n'a aucun mouvement possible, c'est pourquoi il envoie un message à tous ses voisins pour leur demander de bouger.
+
 \subsection{Le cas à quatre agents}
 
 \begin{figure}[h]
@@ -102,7 +104,11 @@ Dans cette situation, on peut faire face à un nouveau cas pathologique.
 	\includegraphics[width=200px]{images/4_agents.png}
 \end{figure}
 
+Nous faisons désormais face à un cycle où chaque agent $i$ souhaite aller sur la case occupée par l'agent $i + 1$, qui est en réalité une généralisation du cas évoqué plus haut pour deux agents qui souhaite aller dans des directions opposées en se \og{} croisant \fg{}. La résolution se fait de la même manière : un des agents va prendre la décision d'effectuer un mouvement orthogonal pour \og{} sortir du carré \fg{} et permettre au système de se résoudre.
+
 \subsection{Le cas à cinq agents}
+
+Le dernier cas pathologique présenté ci-dessous se déroule sur une grille avec 5 agents, mais ressemble quelque peu au cas pathologique avec deux agents. Les agents \circled{2}, \circled{3} et \circled{5} sont à leur case d'objectif et ne souhaitent donc pas bouger. Les agents \circled{1} et \circled{4} doivent \og{} intervertir \fg{} leurs places mais aucun ne peut effectuer un mouvement orthogonal, et se contentent de \og{} monter \fg{} et \og{} descendre \fg{}. Au bout d'un certain temps, voyant que rien ne progresse, un des agents va alors effectuer un nombre de mouvements aléatoires défini par la constante \texttt{RANDOM\_MOVE}. Cela va permettre de suffisamment l'éloigner de la situation bloquée pour qu'il trouve un autre chemin dans la grille.
 
 \begin{figure}[h]
 	\centering
